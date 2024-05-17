@@ -1,8 +1,11 @@
 package com.thinh.timemanagementservice.controller;
 
+import com.thinh.timemanagementservice.dto.SimplePage;
 import com.thinh.timemanagementservice.dto.WorkDayDto;
 import com.thinh.timemanagementservice.service.WorkDayService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +20,8 @@ public class WorkDayController {
     private WorkDayService workDayService;
 
     @GetMapping
-    public ResponseEntity<List<WorkDayDto>> getAllWorkDay() {
-        return new ResponseEntity<>(workDayService.getAllWorkDay(), HttpStatus.OK);
+    public ResponseEntity<SimplePage<WorkDayDto>> getAllWorkDay(@PageableDefault(size = 10) final Pageable pageable) {
+        return new ResponseEntity<>(workDayService.getAllWorkDay(pageable), HttpStatus.OK);
     }
 
     @GetMapping("{workday-id}")

@@ -1,5 +1,6 @@
 package com.thinh.timemanagementservice.service.impl;
 
+import com.thinh.timemanagementservice.dto.SimplePage;
 import com.thinh.timemanagementservice.dto.WorkDayDto;
 import com.thinh.timemanagementservice.entity.WorkDay;
 import com.thinh.timemanagementservice.exception.ResourceNotFoundException;
@@ -7,6 +8,8 @@ import com.thinh.timemanagementservice.mapper.WorkDayMapper;
 import com.thinh.timemanagementservice.repository.WorkDayRepository;
 import com.thinh.timemanagementservice.service.WorkDayService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +28,14 @@ public class WorkDayServiceImpl implements WorkDayService {
     }
 
     @Override
-    public List<WorkDayDto> getAllWorkDay() {
-        List<WorkDay> workDays = workDayRepository.findAll();
-        return workDays.stream().map(WorkDayMapper::toDto).collect(Collectors.toList());
+    public SimplePage<WorkDayDto> getAllWorkDay(Pageable pageable) {
+        Page<WorkDay> workDays = workDayRepository.findAll(pageable);
+        return new SimplePage<>(workDays.getContent().stream()
+                .map(WorkDayMapper::toDto)
+                .collect(Collectors.toList()),
+                pageable,
+                workDays.getTotalElements()
+        );
     }
 
     @Override
