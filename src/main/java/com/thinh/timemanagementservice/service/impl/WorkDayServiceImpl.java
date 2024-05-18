@@ -1,18 +1,19 @@
 package com.thinh.timemanagementservice.service.impl;
 
-import com.thinh.timemanagementservice.dto.SimplePage;
+import com.thinh.timemanagementservice.dto.Paging;
 import com.thinh.timemanagementservice.dto.WorkDayDto;
 import com.thinh.timemanagementservice.entity.WorkDay;
 import com.thinh.timemanagementservice.exception.ResourceNotFoundException;
 import com.thinh.timemanagementservice.mapper.WorkDayMapper;
 import com.thinh.timemanagementservice.repository.WorkDayRepository;
 import com.thinh.timemanagementservice.service.WorkDayService;
+import com.thinh.timemanagementservice.util.DateTimeUtil;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,9 +29,22 @@ public class WorkDayServiceImpl implements WorkDayService {
     }
 
     @Override
-    public SimplePage<WorkDayDto> getAllWorkDay(Pageable pageable) {
+    public Paging<WorkDayDto> getAllWorkDay(Pageable pageable) {
         Page<WorkDay> workDays = workDayRepository.findAll(pageable);
-        return new SimplePage<>(workDays.getContent().stream()
+        return new Paging<>(workDays.getContent().stream()
+                .map(WorkDayMapper::toDto)
+                .collect(Collectors.toList()),
+                pageable,
+                workDays.getTotalElements()
+        );
+    }
+
+    @Override
+    public Paging<WorkDayDto> getAllWorkDayByDate(Pageable pageable, long millis) {
+        val startDateTime = DateTimeUtil.getStartOfDayFromMillis(millis);
+        val endDateTime = DateTimeUtil.getEndOfDayFromMillis(millis);
+        Page<WorkDay> workDays = workDayRepository.findAllByStartDateTimeBetween(startDateTime, endDateTime, pageable);
+        return new Paging<>(workDays.getContent().stream()
                 .map(WorkDayMapper::toDto)
                 .collect(Collectors.toList()),
                 pageable,
@@ -48,12 +62,6 @@ public class WorkDayServiceImpl implements WorkDayService {
     @Override
     public void deleteWorkDay(long id) {
         workDayRepository.deleteById(id);
-    }
-
-    @Override
-    public List<WorkDayDto> getWorkDayByDate(long date) {
-        // TODO implement this method
-        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override

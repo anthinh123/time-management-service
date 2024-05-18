@@ -1,7 +1,7 @@
 package com.thinh.timemanagementservice.service;
 
 
-import com.thinh.timemanagementservice.dto.SimplePage;
+import com.thinh.timemanagementservice.dto.Paging;
 import com.thinh.timemanagementservice.dto.WorkDayDto;
 import org.springframework.data.domain.Pageable;
 
@@ -11,13 +11,13 @@ public interface WorkDayService {
 
     WorkDayDto getWorkDayById(long id);
 
-    SimplePage<WorkDayDto> getAllWorkDay(Pageable pageable);
+    Paging<WorkDayDto> getAllWorkDay(Pageable pageable);
+
+    Paging<WorkDayDto> getAllWorkDayByDate(Pageable pageable, long date);
 
     WorkDayDto saveWorkDay(WorkDayDto savingWorkDay);
 
     void deleteWorkDay(long id);
-
-    List<WorkDayDto> getWorkDayByDate(long date);
 
     WorkDayDto updateWorkDay(WorkDayDto updatingWorkDay);
 

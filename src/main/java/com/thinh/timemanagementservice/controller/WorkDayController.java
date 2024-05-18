@@ -1,6 +1,6 @@
 package com.thinh.timemanagementservice.controller;
 
-import com.thinh.timemanagementservice.dto.SimplePage;
+import com.thinh.timemanagementservice.dto.Paging;
 import com.thinh.timemanagementservice.dto.WorkDayDto;
 import com.thinh.timemanagementservice.service.WorkDayService;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class WorkDayController {
     private WorkDayService workDayService;
 
     @GetMapping
-    public ResponseEntity<SimplePage<WorkDayDto>> getAllWorkDay(@PageableDefault(size = 10) final Pageable pageable) {
+    public ResponseEntity<Paging<WorkDayDto>> getAllWorkDay(@PageableDefault final Pageable pageable) {
         return new ResponseEntity<>(workDayService.getAllWorkDay(pageable), HttpStatus.OK);
     }
 
@@ -30,8 +30,8 @@ public class WorkDayController {
     }
 
     @GetMapping("date/{date}")
-    public ResponseEntity<List<WorkDayDto>> getWorkDayByDate(@PathVariable("date") Long date) {
-        return new ResponseEntity<>(workDayService.getWorkDayByDate(date), HttpStatus.OK);
+    public ResponseEntity<Paging<WorkDayDto>> getWorkDayByDate(@PathVariable("date") Long date, @PageableDefault final Pageable pageable) {
+        return new ResponseEntity<>(workDayService.getAllWorkDayByDate(pageable, date), HttpStatus.OK);
     }
 
     @PostMapping
