@@ -40,9 +40,12 @@ public class WorkDayServiceImpl implements WorkDayService {
     }
 
     @Override
-    public Paging<WorkDayDto> getAllWorkDayByDate(Pageable pageable, long millis) {
-        val startDateTime = DateTimeUtil.getStartOfDayFromMillis(millis);
-        val endDateTime = DateTimeUtil.getEndOfDayFromMillis(millis);
+    public Paging<WorkDayDto> getAllWorkDayByDate(Pageable pageable, long seconds) {
+        val startDateTime = DateTimeUtil.getStartOfDayFromSeconds(seconds);
+        val endDateTime = DateTimeUtil.getEndOfDayFromSeconds(seconds);
+        System.out.println("millis = " + seconds);
+        System.out.println("startDateTime = " + startDateTime);
+        System.out.println("endDateTime = " + endDateTime);
         Page<WorkDay> workDays = workDayRepository.findAllByStartDateTimeBetween(startDateTime, endDateTime, pageable);
         return new Paging<>(workDays.getContent().stream()
                 .map(WorkDayMapper::toDto)
