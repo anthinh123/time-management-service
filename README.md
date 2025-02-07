@@ -1,6 +1,6 @@
 **Summary**
 
-After user made block of times (working, break, long-break), then they can sync up to server. This service will take care to manage these times.
+After user made block of times (working, break, long-break) from mobile app, then they can sync up to server. This service will take care to manage these times.
 
 **Funtions**
 - Get all workdays in database
